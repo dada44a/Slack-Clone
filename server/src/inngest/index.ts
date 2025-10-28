@@ -2,6 +2,7 @@ import { Inngest } from "inngest";
 import { connectDb } from "../db/connect.js";
 import { usersTable } from "../db/schema.js";
 import { eq } from "drizzle-orm";
+import { deleteStreamUser, upsertStreamUser } from "../stream/index.js";
 
 // Create a client to send and receive events
 export const inngest = new Inngest({ id: "slack_clone" });
@@ -22,6 +23,12 @@ const syncUserProfile = inngest.createFunction(
             let db = connectDb();
            const result = await db.insert(usersTable).values(newUser).returning();
               console.log("User inserted with ID:", result);
+              await upsertStreamUser({
+                id: newUser.clerkId as string,
+                name: newUser.name,
+                email: newUser.email,
+                image: newUser.image,
+              })
         } catch (error) {
             console.error("Error inserting user into database:", error);
             throw error;
@@ -37,7 +44,7 @@ const deleteUserProfile = inngest.createFunction(
         try {
             let db = connectDb();
             await db.delete(usersTable).where(eq(usersTable.clerkId, id)).returning();
-            console.log("User deleted with Clerk ID:", id);
+            await deleteStreamUser(id.toString());
         } catch (error) {
             console.error("Error deleting user from database:", error);
             throw error;

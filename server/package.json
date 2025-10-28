@@ -2,19 +2,22 @@
   "name": "server",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --import ./instrument.js src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node --import ./instrument.js dist/index.js"
   },
   "dependencies": {
     "@clerk/backend": "^2.19.0",
     "@hono/clerk-auth": "^3.0.3",
     "@hono/node-server": "^1.19.5",
+    "@hono/sentry": "^1.2.2",
     "@neondatabase/serverless": "^1.0.2",
+    "@sentry/node": "^10.22.0",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
     "hono": "^4.10.3",
-    "inngest": "^3.44.3"
+    "inngest": "^3.44.3",
+    "stream-chat": "^9.25.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
