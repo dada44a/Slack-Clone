@@ -8,7 +8,7 @@ export const inngest = new Inngest({ id: "slack_clone" });
 
 const syncUserProfile = inngest.createFunction(
     { id: "sync_user_profile" },
-    { event: "clerk.user.created" },
+    { event: "clerk/user.created" },
     async ({ event, step }) => {
         const { id, email_addresses, first_name, last_name, image_url } = event.data;
         const newUser = {
@@ -29,7 +29,7 @@ const syncUserProfile = inngest.createFunction(
 
 const deleteUserProfile = inngest.createFunction(
     { id: "delete_user_profile" },
-    { event: "clerk.user.deleted" },
+    { event: "clerk/user.deleted" },
     async ({ event, step }) => {
         const { id } = event.data;
         try {
