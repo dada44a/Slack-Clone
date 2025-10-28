@@ -8,7 +8,7 @@ import { inngest, functions } from "./inngest/index.js";
 
 
 const app = new Hono();
-app.use("*", clerkMiddleware());
+app.use("/protected/*", clerkMiddleware());
 app.use("/api/inngest", inngestServe({ client: inngest, functions }));
 
 
