@@ -20,7 +20,8 @@ const syncUserProfile = inngest.createFunction(
         };
         try {
             let db = connectDb();
-            await db.insert(usersTable).values(newUser);
+           const result = await db.insert(usersTable).values(newUser).returning();
+              console.log("User inserted with ID:", result);
         } catch (error) {
             console.error("Error inserting user into database:", error);
             throw error;
@@ -35,7 +36,8 @@ const deleteUserProfile = inngest.createFunction(
         const { id } = event.data;
         try {
             let db = connectDb();
-            await db.delete(usersTable).where(eq(usersTable.clerkId, id));
+            await db.delete(usersTable).where(eq(usersTable.clerkId, id)).returning();
+            console.log("User deleted with Clerk ID:", id);
         } catch (error) {
             console.error("Error deleting user from database:", error);
             throw error;
